@@ -10,6 +10,7 @@ class _RecoverCard extends StatefulWidget {
     required this.navigateBack,
     required this.onSubmitCompleted,
     required this.loadingController,
+    required this.initialIsoCode,
   });
 
   final FormFieldValidator<String>? userValidator;
@@ -20,6 +21,7 @@ class _RecoverCard extends StatefulWidget {
   final AnimationController loadingController;
 
   final VoidCallback onSubmitCompleted;
+  final String? initialIsoCode;
 
   @override
   _RecoverCardState createState() => _RecoverCardState();
@@ -106,6 +108,7 @@ class _RecoverCardState extends State<_RecoverCard>
       onFieldSubmitted: (value) => _submit(),
       validator: widget.userValidator,
       onSaved: (value) => auth.email = value!,
+      initialIsoCode: widget.initialIsoCode,
     );
   }
 
