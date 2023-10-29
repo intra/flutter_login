@@ -252,8 +252,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       }
     }
     TextInput.finishAutofillContext();
-    widget.onSubmitCompleted?.call();
-
+    // widget.onSubmitCompleted?.call();
+    _formKey.currentState!.save();
+    widget.onSwitchRecoveryPassword();
     return true;
   }
 
@@ -698,7 +699,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
                   if (widget.introWidget != null) widget.introWidget!,
                   _buildUserField(textFieldWidth, messages, auth),
                   const SizedBox(height: 20),
-                  _buildPasswordField(textFieldWidth, messages, auth),
+                  // _buildPasswordField(textFieldWidth, messages, auth),
                   const SizedBox(height: 10),
                 ],
               ),

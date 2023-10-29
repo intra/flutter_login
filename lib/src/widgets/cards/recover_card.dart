@@ -2,6 +2,7 @@ part of 'auth_card_builder.dart';
 
 class _RecoverCard extends StatefulWidget {
   const _RecoverCard({
+    super.key,
     required this.userValidator,
     required this.onBack,
     required this.userType,
@@ -71,13 +72,18 @@ class _RecoverCardState extends State<_RecoverCard>
       await _submitController.reverse();
       return false;
     } else {
-      showSuccessToast(
-        context,
-        messages.flushbarTitleSuccess,
-        messages.recoverPasswordSuccess,
-      );
+      // showSuccessToast(
+      //   context,
+      //   messages.flushbarTitleSuccess,
+      //   messages.recoverPasswordSuccess,
+      // );
+      // workaround to run after _cardSizeAnimation in parent finished
+      // need a cleaner way but currently it works so..
+
       setState(() => _isSubmitting = false);
-      widget.onSubmitCompleted();
+      await _submitController.reverse();
+
+      widget.onSubmitCompleted.call();
       return true;
     }
   }
@@ -104,10 +110,13 @@ class _RecoverCardState extends State<_RecoverCard>
   }
 
   Widget _buildRecoverButton(ThemeData theme, LoginMessages messages) {
-    return AnimatedButton(
+    return ScaleTransition(
+        scale: widget.loadingController,
+        child: AnimatedButton(
       controller: _submitController,
       text: messages.recoverPasswordButton,
       onPressed: !_isSubmitting ? _submit : null,
+    ),
     );
   }
 

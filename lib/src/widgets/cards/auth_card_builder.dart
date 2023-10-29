@@ -83,6 +83,7 @@ class AuthCard extends StatefulWidget {
 
 class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
   final GlobalKey _loginCardKey = GlobalKey();
+  final GlobalKey _recoveryCardKey = GlobalKey();
   final GlobalKey _additionalSignUpCardKey = GlobalKey();
   final GlobalKey _confirmRecoverCardKey = GlobalKey();
   final GlobalKey _confirmSignUpCardKey = GlobalKey();
@@ -377,21 +378,27 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
           ),
         );
       case _recoveryIndex:
-        return _RecoverCard(
+        return _buildLoadingAnimator(
+            theme: Theme.of(context),
+            child:_RecoverCard(
+          key: _recoveryCardKey,
           userValidator: widget.userValidator,
           userType: widget.userType,
           loginTheme: widget.loginTheme,
           loadingController: formController,
           navigateBack: widget.navigateBackAfterRecovery,
           onBack: () => _changeCard(_loginPageIndex),
-          onSubmitCompleted: () {
+          onSubmitCompleted: () async {
             if (auth.onConfirmRecover != null) {
               _changeCard(_confirmRecover);
             } else {
-              _changeCard(_loginPageIndex);
+              // _changeCard(_loginPageIndex);
+              _forwardChangeRouteAnimation(_recoveryCardKey).then((_) {
+                widget.onSubmitCompleted!();
+              });
             }
           },
-        );
+        ));
 
       case _additionalSignUpIndex:
         if (widget.additionalSignUpFields == null) {
